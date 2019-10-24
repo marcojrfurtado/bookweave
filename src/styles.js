@@ -49,10 +49,10 @@ const styles = theme => ({
       maxWidth: 250
     },
     repoInformation: {
-      margin: theme.spacing.unit,
+      margin: theme.spacing(1),
       position: "fixed",
-      bottom: theme.spacing.unit * 2,
-      right: theme.spacing.unit * 3,
+      bottom: theme.spacing(2),
+      right: theme.spacing(3),
       display: "flex",
       "align-items": "center",
     }

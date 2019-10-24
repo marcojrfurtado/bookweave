@@ -6,6 +6,28 @@ Share and search eBooks on the Permaweb.
 
 Latest version (v1.0) is currently live on https://arweave.net/asf
 
+## Sample usage
+
+### Uploading
+
+You need to load your wallet before start uploading. Simply provide the JSON keyfile before.
+
+![upload image](docs/upload.gif)
+
+### Searching
+
+Search and download can be done without any AR fees, and without loading your wallet.
+
+![search image](docs/search.gif)
+
+### Get random docs
+
+![random image](docs/random.gif)
+
+## How to obtain an AR tokens?
+
+Arweave is current distributing free tokens on https://tokens.arweave.org/. Make sure to grab it while it lasts.
+
 ## Limitations
 
 Please be aware that that latest version currently has the following limitations:
@@ -14,9 +36,23 @@ Please be aware that that latest version currently has the following limitations
 
 * ISBN: Given that only exact matches are enabled, ISBN should be the most appropriate search option to be used. However, there is not a good way to obtain them most of the time. You would think that most epub files would use this field as an identifier, but that is not the case. ISBN is just not provided as part of the metadata lots of times. If you have a suggestion, please make sure to raise an issue.
 
-## How to obtain an AR tokens?
+## FAQ
 
-Arweave is current distributing free tokens on https://tokens.arweave.org/. Make sure to grab it while it lasts.
+### bookweave returned a transaction number. Can I check its status somewhere else? Is download only available here?
+
+You can also use ViewBlock to check the status of any transaction, or to download any eBook.
+
+For example, let us assume you uploaded an epub file, and received a transaction id `58r3wilDh-DvOS7-_sOdf965bOb-UX0Dmkd3NNP23zc`. You can check its status on https://viewblock.io/arweave/tx/58r3wilDh-DvOS7-_sOdf965bOb-UX0Dmkd3NNP23zc
+
+Once you land that page, simply click on **SHOW ENCODED DATA** to download the file.
+
+### I lost my transaction ID, and I cannot find my book on bookweave
+
+Given the ledger is public, and the address of your wallet is also known, simply enter it on ViewBlock to see the latet transactions. Given a wallet with id `y6yHKWeolQydOwLzIuWh3Cg6VTQAVEdf1qoOmJJyNaY`, for example, you can view its transactions through https://viewblock.io/arweave/address/y6yHKWeolQydOwLzIuWh3Cg6VTQAVEdf1qoOmJJyNaY
+
+### How long do transactions take to be processed
+
+As bookweave indicates, your transaction may take several minutes to be processed, although it varies. Do not expect any upload to be available right away.
 
 ## Running it locally
 
@@ -26,6 +62,6 @@ npm install
 DANGEROUSLY_DISABLE_HOST_CHECK=true npm start
 ```
 
-The open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Then open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 

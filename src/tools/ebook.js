@@ -3,7 +3,6 @@ import { arweaveInstance } from './arweave';
 import { ArAppName, ArAppMode, ArAppVersion } from '../constants'
 import { createSearchPattern } from './stringUtils'
 import Epub from "epubjs/lib/index";
-import { Slide } from '@material-ui/core';
 
 
 const supportedExtensions=".pdf,.epub"
@@ -165,7 +164,6 @@ const queryTransactionIds = async(searchField, searchValue) => new Promise(async
 });
 
 const fetchTransactions = async(transactionIds) => new Promise(async(resolve, reject) => {
-    const decodingOptions = {decode: true, string: true}
     try {
         var docInfoArray = []
         for (var i = 0; i < transactionIds.length; i++) {
@@ -173,11 +171,13 @@ const fetchTransactions = async(transactionIds) => new Promise(async(resolve, re
 
             const transaction = await arweaveInstance.transactions.get(txid)
             var docInfo = {}
-            transaction.get('tags').forEach(tag => {
+            const tags = transaction.get('tags')
+            for (var j = 0; j < tags.length; j++) {
+                const tag = tags[j]
                 let key = tag.get('name', {decode: true, string: true});
                 let value = tag.get('value', {decode: true, string: true});
                 docInfo[key] = value
-              });
+            }
             docInfo['transaction_id'] = txid
             docInfo['data'] = transaction.get('data', {decode: true, string: false})
             docInfoArray.push(docInfo)
