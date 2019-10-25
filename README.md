@@ -4,7 +4,7 @@ Share and search eBooks on the Permaweb.
 
 ## Live
 
-Latest version (v1.0) is currently live on https://arweave.net/asf
+Latest version (v1.0) is currently live on https://arweave.net/qdllEy5Hxr8OOkSus28RobuiVab-h-iqt75gkSaBcz4
 
 ## Sample usage
 
@@ -56,12 +56,18 @@ As bookweave indicates, your transaction may take several minutes to be processe
 
 ## Running it locally
 
-Assuming you are using Bash, you can simply
+First install any requirements with
 ```
 npm install
-DANGEROUSLY_DISABLE_HOST_CHECK=true npm start
 ```
 
-Then open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Then simply run `npm run build`, and open `dist/index.html` on your browser.
 
+Alternatively, you can also run it within a server using:
+
+```
+npm start
+```
+
+Then open [http://localhost:3000](http://localhost:3000).
 

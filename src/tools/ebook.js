@@ -4,6 +4,10 @@ import { ArAppName, ArAppMode, ArAppVersion } from '../constants'
 import { createSearchPattern } from './stringUtils'
 import Epub from "epubjs/lib/index";
 
+// NOTE: Needed because we are unable to easily pack an extra worker for arweave
+const workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js'
+pdfjsLib.PDFJS.workerSrc = workerSrc;
+const mozillaWorker = new pdfjsLib.PDFWorker(workerSrc)
 
 const supportedExtensions=".pdf,.epub"
 const isbnPattern = /(^|[^0-9]{1,})[0-9]{13}$/
@@ -52,7 +56,7 @@ const loadMetadata = async(eBookName, rawEBookData) => new Promise(async (resolv
 
         const isPDF = eBookName.endsWith(".pdf")
         if (isPDF) {
-            var loadingTask = pdfjsLib.getDocument({data: rawEBookData})
+            var loadingTask = pdfjsLib.getDocument({data: rawEBookData, worker: mozillaWorker})
             doc = await loadingTask.promise
             inputMetadata = await doc.getMetadata()
             fingerprint = doc.fingerprint
