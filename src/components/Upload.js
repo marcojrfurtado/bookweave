@@ -125,7 +125,7 @@ class Upload extends React.Component {
                 }
                 <input  ref="ebookUploader" type="file" onChange={ e => this.loadeBook(e)} accept={supportedExtensions} className={classes.hidden} />
                 <Fab className={classes.buttonLoad} onClick={() => this.refs.ebookUploader.click()} variant="extended" disabled={!userArweaveWallet}>
-                    <Typography>Upload EPUB/PDF</Typography>
+                    <Typography>Upload EPUB</Typography>
                     <Publish style={{ marginLeft: 3 }} />
                 </Fab>
             </Grid>

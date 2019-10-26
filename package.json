@@ -5,7 +5,6 @@
   "dependencies": {
     "arweave": "1.4.0",
     "epubjs": "^0.3.84",
-    "pdfjs-dist": "^1.8.432",
     "react": "^16.10.1",
     "react-dom": "^16.10.1",
     "react-scripts": "3.2.0",

@@ -1,15 +1,9 @@
-import pdfjsLib from 'pdfjs-dist/webpack';
 import { arweaveInstance } from './arweave';
 import { ArAppName, ArAppMode, ArAppVersion } from '../constants'
 import { createSearchPattern } from './stringUtils'
 import Epub from "epubjs/lib/index";
 
-// NOTE: Needed because we are unable to easily pack an extra worker for arweave
-const workerSrc = '//mozilla.github.io/pdf.js/build/pdf.worker.js'
-pdfjsLib.PDFJS.workerSrc = workerSrc;
-const mozillaWorker = new pdfjsLib.PDFWorker(workerSrc)
-
-const supportedExtensions=".pdf,.epub"
+const supportedExtensions=".epub"
 const isbnPattern = /(^|[^0-9]{1,})[0-9]{13}$/
 
 const guessISBNInIdentifier = (identifier)  => {
@@ -54,13 +48,7 @@ const loadMetadata = async(eBookName, rawEBookData) => new Promise(async (resolv
         var inputMetadata = undefined
         var fingerprint = undefined
 
-        const isPDF = eBookName.endsWith(".pdf")
-        if (isPDF) {
-            var loadingTask = pdfjsLib.getDocument({data: rawEBookData, worker: mozillaWorker})
-            doc = await loadingTask.promise
-            inputMetadata = await doc.getMetadata()
-            fingerprint = doc.fingerprint
-        } else if (eBookName.endsWith(".epub")) {
+        if (eBookName.endsWith(".epub")) {
             doc = new Epub(rawEBookData, {});
             inputMetadata = await doc.loaded.metadata
             fingerprint = inputMetadata.identifier
@@ -72,8 +60,8 @@ const loadMetadata = async(eBookName, rawEBookData) => new Promise(async (resolv
 
         outputMetadata['fingerprint'] = fingerprint
         outputMetadata['author'] = inputMetadata.info ? inputMetadata.info.Author : inputMetadata.creator
-        outputMetadata['fileType'] = isPDF ? "pdf" : "epub"
-        outputMetadata['Content-Type'] = isPDF ? "application/pdf" : "application/epub+zip"
+        outputMetadata['fileType'] = "epub"
+        outputMetadata['Content-Type'] = "application/epub+zip"
         outputMetadata['title'] = inputMetadata.info ? inputMetadata.info.Title : inputMetadata.title
         outputMetadata['searchTitle'] = createSearchPattern(outputMetadata.title)
         outputMetadata['searchAuthor'] = createSearchPattern(outputMetadata.author)

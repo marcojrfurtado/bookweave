@@ -106,7 +106,6 @@ class Search extends React.Component {
                     <TableCell>Title</TableCell>
                     <TableCell>Author</TableCell>
                     <TableCell>ISBN</TableCell>
-                    <TableCell>File Type</TableCell>
                     <TableCell>Size</TableCell>
                     <TableCell>Download</TableCell>
                     <TableCell>Transaction</TableCell>
@@ -134,9 +133,6 @@ class Search extends React.Component {
                             </TableCell>
                             <TableCell datatitle="ISBN" className={classes.tableDataCell}>
                               <Typography>{n.isbn}</Typography>
-                            </TableCell>
-                            <TableCell datatitle="FileType" className={classes.tableDataCell}>
-                              <Typography>{n.fileType}</Typography>
                             </TableCell>
                             <TableCell datatitle="Size" className={classes.tableDataCell}>
                               <Typography>{((n.sizeBytes)/(1024*1024)).toFixed(2)} MB</Typography>
