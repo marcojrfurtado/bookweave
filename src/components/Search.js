@@ -1,7 +1,6 @@
 import React, { Fragment } from 'react'
 import {
     Grid,
-    Link,
     Paper,
     Typography, 
     Table, 
@@ -12,8 +11,8 @@ import {
     TablePagination } from '@material-ui/core'
 import { withStyles } from '@material-ui/core/styles';
 import styles from '../styles'
-import { getNDocs, queryDocs } from '../tools/ebook'
-import { viewTransactionBaseUrl } from '../tools/arweave'
+import { getAllDocs, queryDocs } from '../tools/ebook'
+import { arweaveDataHostUrl, viewTransactionBaseUrl } from '../tools/arweaveUtils'
 import { createSearchPattern } from '../tools/stringUtils'
 import LoadingSpinner from './LoadingSpinner'
 import SearchBar from './SearchBar'
@@ -35,7 +34,7 @@ class Search extends React.Component {
         isLoading: true
       })
       try {
-        const data = await getNDocs(5)
+        const data = await getAllDocs()
         this.setState({
           data :  data,
           isLoading : false
@@ -56,22 +55,6 @@ class Search extends React.Component {
     handleChangeRowsPerPage = (event) => {
       this.setState({ rowsPerPage: event.target.value });
     };
-
-    handleFileDownload = async(data, fileName, contentType) => {
-      const a = document.createElement("a")
-      document.body.appendChild(a)
-      a.style = "display: none"
-      const blob = new Blob([data], {type: contentType})
-      const url = window.URL.createObjectURL(blob)
-      a.href = url
-      a.download = fileName
-      a.click()
-      window.URL.revokeObjectURL(url)
-    }
-
-    generateFileName = (fileMetadata) => {
-      return '' + fileMetadata.title + '_' + fileMetadata.author + '.' + fileMetadata.fileType
-    }
 
     runSearch = async(searchType, searchValue) => {
       this.setState({
@@ -138,9 +121,7 @@ class Search extends React.Component {
                               <Typography>{((n.sizeBytes)/(1024*1024)).toFixed(2)} MB</Typography>
                             </TableCell>
                             <TableCell datatitle="Download" className={classes.downloadLink}>
-                              <Link onClick={() => this.handleFileDownload(n.data, this.generateFileName(n), n['Content-Type'])}>
-                                  <Typography>Link</Typography>
-                              </Link>
+                              <a href={arweaveDataHostUrl+n.transaction_id+"."+n.fileType}>Link</a>
                             </TableCell>
                             <TableCell datatitle="Transaction" className={classes.tableDataCell}>
                               <a href={viewTransactionBaseUrl+n.transaction_id}>

@@ -4,7 +4,7 @@ import { withStyles } from '@material-ui/core/styles';
 import { Grid, Typography, Fab } from '@material-ui/core'
 import { AccountBalanceWallet } from "@material-ui/icons"
 import styles from '../styles'
-import { arweaveInstance, readArweaveWallet } from '../tools/arweave'
+import { arweaveInstance, readArweaveWallet } from '../tools/arweaveUtils'
 
 class Wallet extends React.Component {
 

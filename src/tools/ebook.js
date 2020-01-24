@@ -1,5 +1,4 @@
-import { arweaveInstance } from './arweave';
-import { ArAppName, ArAppMode, ArAppVersion } from '../constants'
+import { arweaveInstance, queryAppTransactions, addAppTagsToTransaction } from './arweaveUtils';
 import { createSearchPattern } from './stringUtils'
 import Epub from "epubjs/lib/index";
 
@@ -17,25 +16,8 @@ const guessISBNInIdentifier = (identifier)  => {
 
 const findFingerprint  = async(fingerprint) => {
 
-    const txids = await arweaveInstance.arql({
-        op: "and",
-        expr1: {
-            op: "equals",
-            expr1: "fingerprint",
-            expr2: fingerprint
-        },
-        expr2: queryWithinApp()
-    })
-    return txids.length > 0
-}
-
-const addAppTagsToTransaction = async(transaction) => {
-
-    await transaction.addTag('ArAppName', ArAppName)
-    await transaction.addTag('ArAppVersion', ArAppVersion)
-    await transaction.addTag('ArAppMode', ArAppMode)
-
-    return transaction
+    const result = await queryAppTransactions([{ fingerprint: fingerprint}])
+    return result.data.transactions > 0
 }
 
 const loadMetadata = async(eBookName, rawEBookData) => {   
@@ -95,89 +77,21 @@ const createTransationFromEBookData = async(eBookName, rawEBookData, arweaveWall
     return {transaction, fee, metadata}
 }
 
-const queryWithinApp = () => {
-    return {
-        op: "and",
-        expr1: {
-            op: "and",
-            expr1: {
-                op: "equals",
-                expr1: "ArAppName",
-                expr2: ArAppName
-            },
-            expr2: {
-                op: "equals",
-                expr1: "ArAppVersion",
-                expr2: ArAppVersion
-            }
-        },
-        expr2: {
-            op: "equals",
-            expr1: "ArAppMode",
-            expr2: ArAppMode
-        }
-    }
-}
-
-const getAllTransactionsIds = async() => {
-    const txids = await arweaveInstance.arql(queryWithinApp())
-    return txids
-}
-
-const queryTransactionIds = async(searchField, searchValue) => {
-    const txids = await arweaveInstance.arql({
-        op: "and",
-        expr1: {
-            op: "equals",
-            expr1: searchField,
-            expr2: searchValue
-        },
-        expr2: queryWithinApp()})
-    return txids
-}
-
-const fetchTransactions = async(transactionIds) => {
-    var docInfoArray = []
-    for (var i = 0; i < transactionIds.length; i++) {
-        const txid = transactionIds[i]
-
-        const transaction = await arweaveInstance.transactions.get(txid)
-        var docInfo = {}
-        const tags = transaction.get('tags')
-        for (var j = 0; j < tags.length; j++) {
-            const tag = tags[j]
-            let key = tag.get('name', {decode: true, string: true});
-            let value = tag.get('value', {decode: true, string: true});
-            docInfo[key] = value
-        }
-        docInfo['transaction_id'] = txid
-        docInfo['data'] = transaction.get('data', {decode: true, string: false})
-        docInfoArray.push(docInfo)
-    }
-    return docInfoArray
-}
-
-const shuffle = (array) => {
-    array.sort(() => Math.random() - 0.5);
-    return array
-}
-
-const getNDocs = async(n) => {
-    const txids = await getAllTransactionsIds()
-    const randomSubsetTxids = shuffle(txids).slice(0, n)
-    const docInfo = await fetchTransactions(randomSubsetTxids)
+const getAllDocs = async() => {
+    const docInfo = await queryAppTransactions()
     return docInfo
 }
 
 const queryDocs = async(searchField, searchValue) => {
-    const txids = await queryTransactionIds(searchField, searchValue)
-    const docInfo = await fetchTransactions(txids)
-    return docInfo
+    return await queryAppTransactions([{
+        name: searchField,
+        value: searchValue
+    }])
 }
 
 export{
     supportedExtensions,
     createTransationFromEBookData,
-    getNDocs,
+    getAllDocs,
     queryDocs
 }

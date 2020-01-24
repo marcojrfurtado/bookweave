@@ -6,7 +6,7 @@ import { withStyles } from '@material-ui/core/styles';
 import styles from '../styles'
 import readFile from '../tools/readFile';
 import { createTransationFromEBookData, supportedExtensions } from '../tools/ebook';
-import { arweaveInstance, viewTransactionBaseUrl } from '../tools/arweave'
+import { arweaveInstance, viewTransactionBaseUrl } from '../tools/arweaveUtils'
 import LoadingSpinner from './LoadingSpinner'
 
 
