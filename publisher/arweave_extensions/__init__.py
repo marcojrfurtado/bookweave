@@ -1,0 +1,1 @@
+from arweave_extensions.wallet import WalletWithTxAnchor

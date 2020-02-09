@@ -1,0 +1,6 @@
+venv/
+output/
+*.whl
+.idea/
+*.pyc
+notes.txt
