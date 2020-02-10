@@ -55,7 +55,7 @@ def _get_block_information(preexisting_books: dict) -> Tuple[int, int]:
 
 
 def publish_ebooks(wallet: WalletWithTxAnchor, collection: Collection, publish_n_books: int =1,
-                   max_books_per_block: int = 150):
+                   max_books_per_block: int = 150, skip_to_textno: int = 1):
     """
     Publishes Gutenberg books for a certain Collection
     :param wallet: Arweave wallet, used for signing and sending transactions
@@ -63,6 +63,7 @@ def publish_ebooks(wallet: WalletWithTxAnchor, collection: Collection, publish_n
     :param publish_n_books: Number of Gutenberg books to be published. Will skip those that have already been persisted.
     :param max_books_per_block: Maximum number of books per block. Please check the README for further reference on what
                                 a block represents.
+    :param skip_to_textno: Starts publishing Gutenberg books from a specific id
     :raises Exception: If collection had not been signed, or sent
     """
     if not collection.is_signed or not collection.is_sent:
@@ -73,7 +74,7 @@ def publish_ebooks(wallet: WalletWithTxAnchor, collection: Collection, publish_n
     top_block, books_top_block = _get_block_information(preexisting_books)
 
     published_amount=0
-    cur_id = 0
+    cur_id = skip_to_textno - 1
     while published_amount < publish_n_books:
         cur_id += 1
         if cur_id in preexisting_textnos:
@@ -140,6 +141,8 @@ if __name__ == "__main__":
                                                        "trusted sources", type=str, default="")
     parser.add_argument("-N", "--n_books", help="Number of books to be published", type=int, default=1)
     parser.add_argument("-B", "--books_per_block", help="Number of books inside each block", type=int, default=150)
+    parser.add_argument("-S", "--skip_to_textno", help="Starts publishing Gutenberg books from a certain id",
+                        type=int, default=1)
 
     args = parser.parse_args()
 
@@ -173,5 +176,5 @@ if __name__ == "__main__":
             publish_collection = Collection(transaction_id=collection_ids[0]['id'])
             print('Publishing ebooks...')
             publish_ebooks(wallet, publish_collection, publish_n_books=args.n_books,
-                           max_books_per_block=args.books_per_block)
+                           max_books_per_block=args.books_per_block, skip_to_textno=args.skip_to_textno)
 

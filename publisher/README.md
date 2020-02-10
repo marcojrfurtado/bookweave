@@ -42,6 +42,9 @@ collection.send()
 And then books can be published as
 ```python
 book =  Book(epub_uri='http://my-host/book.epub', wallet=wallet, collection=collection, block_number=0)
+book.add_metadata_tag('title', 'Title1')
+book.add_metadata_tag('author', 'Author1')
+book.add_metadata_tag('isbn', 'xxx1')
 book.sign()
 book.send()
 ```

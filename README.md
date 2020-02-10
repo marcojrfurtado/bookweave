@@ -12,6 +12,8 @@ Latest version will always be redirected by https://marcojrfurtado.github.io/boo
 
 v1.1: https://3d7uax4e6cu3.arweave.net/ZgPa5skBl12mmaOFMDDTTakgI3D_tj29cSmZClpLjWU
 
+Note: v1.1 points to an "unofficial mirror" of the Gutenberg collection, containing a subset of their books.
+
 ## Subprojects
 
 * `publisher`: Python package allowing users to publish their own book collections into the permaweb;
