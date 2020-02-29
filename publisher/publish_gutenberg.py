@@ -7,6 +7,7 @@ from arweave_extensions import WalletWithTxAnchor
 from graphql.query import find_collection_ids, find_books_from_collection
 from typing import List, Tuple
 import warnings, logging
+from unidecode import unidecode
 
 logger = logging.getLogger("arweave.arweave_lib").setLevel(logging.WARNING)
 
@@ -53,7 +54,6 @@ def _get_block_information(preexisting_books: dict) -> Tuple[int, int]:
     top_block_books = 0 if top_block not in books_per_block else books_per_block[top_block]
     return top_block, top_block_books
 
-
 def publish_ebooks(wallet: WalletWithTxAnchor, collection: Collection, publish_n_books: int =1,
                    max_books_per_block: int = 150, skip_to_textno: int = 1):
     """
@@ -97,7 +97,8 @@ def publish_ebooks(wallet: WalletWithTxAnchor, collection: Collection, publish_n
         ebook.add_extra_tag(TAG_TEXTNO, str(cur_id))
         for label in METADATA_ARGS:
             metadata = get_metadata(label, cur_id)
-            ebook.add_metadata_tag(label, metadata)
+            decoded_metadata = frozenset([unidecode(metadata_field) for metadata_field in metadata])
+            ebook.add_metadata_tag(label, decoded_metadata)
         print("... ready to publish textno '%d' (in block '%d')" % (cur_id, top_block))
 
         try:

@@ -39,7 +39,10 @@ BOOK_NAME_QUERY = """
 def _graphql_request(query: str) -> dict:
     request = requests.post(GRAPHQL_ENDPOINT, json={'query': query })
     if request.status_code == 200:
-        return request.json()
+        json_result = request.json()
+        if 'errors' in json_result:
+            raise Exception("GraphQL request failed, reason: '%s'" % str(json_result['errors']))
+        return json_result
     else:
         raise Exception("Query failed to run by returning code of {}. {}".format(request.status_code, query))
 
